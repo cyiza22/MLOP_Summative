@@ -27,12 +27,8 @@ wheels/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# Models
-*.h5
-*.pkl
-*.pt
-*.pth
-saved_model/
+
+
 
 # Data
 data/uploads/*
