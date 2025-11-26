@@ -33,10 +33,10 @@ os.makedirs('models', exist_ok=True)
 # Initialize predictor
 try:
     predictor = ModelPredictor(MODEL_PATH)
-    print(f"✅ Model loaded from {MODEL_PATH}")
+    print(f" Model loaded from {MODEL_PATH}")
 except:
     predictor = None
-    print("⚠️ Model not found. Please train the model first.")
+    print(" Model not found. Please train the model first.")
 
 # Metrics
 metrics = {

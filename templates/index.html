@@ -167,6 +167,58 @@
             margin-bottom: 10px;
         }
 
+        .warning-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #f39c12;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .warning-content {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+        }
+
+        .warning-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .warning-text {
+            flex: 1;
+        }
+
+        .warning-title {
+            margin: 0 0 10px 0;
+            color: #856404;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .warning-description {
+            margin: 0 0 10px 0;
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .warning-list {
+            margin: 0 0 10px 20px;
+            color: #856404;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .warning-note {
+            margin: 0;
+            color: #856404;
+            font-size: 13px;
+            font-style: italic;
+        }
+
         .btn {
             padding: 15px 30px;
             border: none;
@@ -415,6 +467,18 @@
                             </p>
                         </div>
                     </div>
+
+                    <div id="preprocessInfo" class="file-info" style="display: none; margin-top: 15px; background: #e8f4f8; border-left: 4px solid #3498db;">
+                        <h4 style="margin: 0 0 10px 0; color: #2c3e50; font-size: 14px;">
+                            🔄 Image Preprocessing Preview
+                        </h4>
+                        <div id="preprocessDetails" style="font-size: 13px; color: #34495e; line-height: 1.6;">
+      
+                        </div>
+                    </div>
+
+
+
                     <button id="predictBtn" class="btn btn-primary" onclick="predictImage()" disabled>
                         🚀 Predict
                     </button>
@@ -439,23 +503,23 @@
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-label">Accuracy</div>
-                        <div class="metric-value">94.2%</div>
+                        <div class="metric-value">87.4%</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">Precision</div>
-                        <div class="metric-value">92.8%</div>
+                        <div class="metric-value">87.6%</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">Recall</div>
-                        <div class="metric-value">93.1%</div>
+                        <div class="metric-value">87.4%</div>
                     </div>
                     <div class="metric-card">
                         <div class="metric-label">F1-Score</div>
-                        <div class="metric-value">92.9%</div>
+                        <div class="metric-value">87.3%</div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">Loss</div>
-                        <div class="metric-value">0.18</div>
+                        <div class="metric-label">Test Samples</div>
+                        <div class="metric-value">10,000</div>
                     </div>
                 </div>
             </div>
@@ -487,6 +551,31 @@
                         </div>
                         <div class="prediction-item">
                             <span>Deer</span>
+                            <div class="prediction-bar"><div class="prediction-fill" style="width: 100%"></div></div>
+                            <span>5,000</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Dog</span>
+                            <div class="prediction-bar"><div class="prediction-fill" style="width: 100%"></div></div>
+                            <span>5,000</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Frog</span>
+                            <div class="prediction-bar"><div class="prediction-fill" style="width: 100%"></div></div>
+                            <span>5,000</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Horse</span>
+                            <div class="prediction-bar"><div class="prediction-fill" style="width: 100%"></div></div>
+                            <span>5,000</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Ship</span>
+                            <div class="prediction-bar"><div class="prediction-fill" style="width: 100%"></div></div>
+                            <span>5,000</span>
+                        </div>
+                        <div class="prediction-item">
+                            <span>Truck</span>
                             <div class="prediction-bar"><div class="prediction-fill" style="width: 100%"></div></div>
                             <span>5,000</span>
                         </div>
@@ -543,15 +632,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 30px; padding: 20px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #667eea;">
-                    <h3 style="margin-bottom: 10px;">ℹ️ Retraining Process</h3>
-                    <ol style="margin-left: 20px; line-height: 1.8;">
-                        <li>Upload bulk training images</li>
-                        <li>Data is preprocessed and validated</li>
-                        <li>Model retrains using transfer learning</li>
-                        <li>Updated model is deployed automatically</li>
-                    </ol>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -580,16 +661,69 @@
         }
 
         // Handle image selection
+        // Handle image selection
         function handleImageSelect(event) {
             const file = event.target.files[0];
             if (file) {
                 selectedFile = file;
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    document.getElementById('uploadContent').innerHTML = `
-                        <img src="${e.target.result}" alt="Preview">
-                        <p style="margin-top: 10px;">Image ready for prediction</p>
-                    `;
+                    // Create image to get dimensions
+                    const img = new window.Image();
+                    img.onload = function() {
+                        const originalWidth = img.width;
+                        const originalHeight = img.height;
+                        const minDimension = Math.min(originalWidth, originalHeight);
+                        const resizeRatio = (minDimension / 32).toFixed(1);
+                        const pixelsOriginal = originalWidth * originalHeight;
+                        const pixelsFinal = 32 * 32;
+                        const dataRetention = ((pixelsFinal / pixelsOriginal) * 100).toFixed(2);
+                        
+                        // Update upload content
+                        document.getElementById('uploadContent').innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <p style="margin-top: 10px;">Image ready for prediction</p>
+                        `;
+                        
+                        // Show preprocessing info
+                        const cropWidth = originalWidth - minDimension;
+                        const cropHeight = originalHeight - minDimension;
+                        
+                        document.getElementById('preprocessDetails').innerHTML = `
+                            <table style="width: 100%; font-size: 12px;">
+                                <tr>
+                                    <td style="padding: 4px 0; color: #7f8c8d;">Original Size:</td>
+                                    <td style="padding: 4px 0; font-weight: 600;">${originalWidth}×${originalHeight} pixels</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 4px 0; color: #7f8c8d;">Crop Amount:</td>
+                                    <td style="padding: 4px 0; font-weight: 600;">${cropWidth}px width, ${cropHeight}px height removed</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 4px 0; color: #7f8c8d;">After Crop:</td>
+                                    <td style="padding: 4px 0; font-weight: 600;">${minDimension}×${minDimension} pixels (square)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 4px 0; color: #7f8c8d;">Final Size:</td>
+                                    <td style="padding: 4px 0; font-weight: 600; color: #27ae60;">32×32 pixels ✓</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 4px 0; color: #7f8c8d;">Resize Ratio:</td>
+                                    <td style="padding: 4px 0; font-weight: 600;">${resizeRatio}× reduction</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 4px 0; color: #7f8c8d;">Data Retained:</td>
+                                    <td style="padding: 4px 0; font-weight: 600; color: ${dataRetention > 1 ? '#27ae60' : '#e74c3c'};">${dataRetention}% of original pixels</td>
+                                </tr>
+                            </table>
+                            <p style="margin-top: 10px; font-size: 12px; font-style: italic; color: #7f8c8d;">
+                                💡 Image will be center-cropped to square, then resized to 32×32 for optimal model performance.
+                            </p>
+                        `;
+                        
+                        document.getElementById('preprocessInfo').style.display = 'block';
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
                 document.getElementById('predictBtn').disabled = false;
@@ -723,9 +857,9 @@
                 
                 setTimeout(() => {
                     if (data.success) {
-                        alert(`✅ ${data.message}\n\nTraining samples: ${data.training_samples}\nFinal accuracy: ${(data.final_accuracy * 100).toFixed(1)}%`);
+                        alert(` ${data.message}\n\nTraining samples: ${data.training_samples}\nFinal accuracy: ${(data.final_accuracy * 100).toFixed(1)}%`);
                     } else {
-                        alert(`❌ Error: ${data.error}`);
+                        alert(`Error: ${data.error}`);
                     }
                     
                     document.getElementById('retrainProgress').style.display = 'none';
@@ -735,7 +869,7 @@
                 
             } catch (error) {
                 clearInterval(interval);
-                alert(`❌ Error: ${error.message}`);
+                alert(` Error: ${error.message}`);
                 document.getElementById('retrainProgress').style.display = 'none';
                 document.getElementById('retrainBtn').disabled = false;
             }
