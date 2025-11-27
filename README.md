@@ -1,4 +1,4 @@
-# CIFAR-10 Image Classification — Full ML Pipeline
+# CIFAR-10 Image Classification ML Pipeline
 
 ## Demo & Live App
 
