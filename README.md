@@ -78,7 +78,7 @@ Dataset source: [https://www.cs.toronto.edu/~kriz/cifar.html](https://www.cs.tor
 
 ### Clone repo
 
-git clone https://github.com/yourusername/ml-pipeline-project.git
+git clone https://github.com/cyiza22/ml-pipeline-project.git
 cd ml-pipeline-project
 
 
