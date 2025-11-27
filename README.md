@@ -1,6 +1,6 @@
 # CIFAR-10 Image Classification — Full ML Pipeline
 
-## 🎥 Demo & Live App
+## Demo & Live App
 
 * **Video Demo:**  https://www.loom.com/share/50a8b48bcc5f4e65ac0f19da583a0606
 * **Live App:** https://mlopsummative-production.up.railway.app/
@@ -314,6 +314,3 @@ ML_Pipeline_Project/
 * CIFAR-10 Dataset
 * TensorFlow Docs
 * Flask Docs
-
-
-If you want a **more aesthetic pastel theme**, **more emojis**, **cleaner diagrams**, or **sections made collapsible**, I can apply that style too.
